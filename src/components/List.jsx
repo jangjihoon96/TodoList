@@ -1,20 +1,21 @@
-import { useState } from "react";
 import { styled } from "styled-components/macro";
 import DeleteButton from "./DeleteButton";
 
-export default function List() {
-  const data = [
-    { id: 1, content: "알고리즘 5문제 풀기", complete: false },
-    { id: 2, content: "토이 프로젝트 1개 만들기", complete: false },
-  ];
-  const [todoData, setTodoData] = useState([...data]);
-
+export default function List({ todoData, setTodoData }) {
   const toggleComplete = (id) => {
-    setTodoData((prevData) =>
-      prevData.map((todo) =>
+    setTodoData((prevData) => {
+      return prevData.map((todo) =>
         todo.id === id ? { ...todo, complete: !todo.complete } : todo
-      )
-    );
+      );
+    });
+  };
+
+  const deleteTodo = (id) => {
+    setTodoData((prevData) => {
+      return prevData.filter((todo) => {
+        return todo.id !== id;
+      });
+    });
   };
 
   return (
@@ -24,10 +25,23 @@ export default function List() {
           <span
             onClick={() => toggleComplete(todo.id)}
             className={todo.complete ? "complete" : null}
+            tabIndex="0"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                toggleComplete(todo.id);
+              }
+            }}
           >
             {todo.id}. {todo.content}
           </span>
-          <DeleteButton type="button">Del</DeleteButton>
+          <DeleteButton
+            type="button"
+            setTodoData={setTodoData}
+            todo={todo}
+            deleteTodo={deleteTodo}
+          >
+            Del
+          </DeleteButton>
         </li>
       ))}
     </StyledList>

@@ -1,7 +1,16 @@
 import { styled } from "styled-components/macro";
 
-export default function DeleteButton({ type, children }) {
-  return <StyledDeleteButton type={type}>{children}</StyledDeleteButton>;
+export default function DeleteButton({ todo, deleteTodo, type, children }) {
+  return (
+    <StyledDeleteButton
+      type={type}
+      onClick={() => {
+        deleteTodo(todo.id);
+      }}
+    >
+      {children}
+    </StyledDeleteButton>
+  );
 }
 
 const StyledDeleteButton = styled.button`
